@@ -61,7 +61,17 @@ function install_package() {
 
     info("Updating winget source ...")
 
+    winget source update --disable-interactivity
 
+    ForEach($str_name in $third_install) {
+        if ($str_name.Name -eq "" -and $str_name.msstore_id -eq "") {
+            info("End Of Array")
+            break;
+        }
+
+        info("Installing ${str_name.Name} ...")
+        winget insteall $str_name.msstore_id --source winget
+    }
 }
 
 
