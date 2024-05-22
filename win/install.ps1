@@ -76,7 +76,7 @@ function install_package() {
             break;
         }
 
-        info(">> Installing $str_name.Name ...")
+        info(">> Installing " + $str_name.Name + "...")
         winget install $str_name.msstore_id --source winget
     }
 }
