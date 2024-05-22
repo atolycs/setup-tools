@@ -46,6 +46,8 @@ function winget_install() {
     Add-AppxPackage -Path Xaml.appx
     Add-AppxPackage -Path winget.appx 
 
+    info(">> Remove Install package")
+
     Remove-Item -Path VCLibs.appx
     Remove-Item -Path Xaml.appx
     Remove-Item -Path winget.appx
