@@ -52,6 +52,7 @@ function winget_install() {
 }
 
 function install_package() {
+
     $third_install = @(
         @{Name="GitHub CLI"; msstore_id="GitHub.cli"};
         @{Name="Git for Windows"; msstore_id="Git.Git"};
@@ -74,7 +75,7 @@ function install_package() {
         }
 
         info(">> Installing ${str_name.Name} ...")
-        winget insteall $str_name.msstore_id --source winget
+        winget install $str_name.msstore_id --source winget
     }
 }
 
