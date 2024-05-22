@@ -74,6 +74,17 @@ function install_package() {
     }
 }
 
+function deploy_dotfiles() {
+    info("Downloading Atolycs dotfiles...")
+
+    if (-Not (Get-Command git)) {
+        warn("Not Found. Downloading git...")
+        winget install git.git
+    }
+
+    git clone https://github.com/atolycs/dotfiles -b dev
+}
+
 
 greeting
 
@@ -82,3 +93,6 @@ winget_install
 
 # Install from winget
 install_package
+
+# deploy dotfiles
+#deploy_dotfiles
