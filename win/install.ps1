@@ -34,10 +34,14 @@ function winget_install() {
     $latest_xaml = "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx"
 
     info("Installing winget and dependencies...")
+    info(">> Downloading VCLibs...")
     Invoke-WebRequest -Uri $latest_vclib -OutFile VCLibs.appx
+    info(">> Downloading Microsoft Xaml...")
     Invoke-WebRequest -Uri $latest_xaml -OutFile Xaml.appx
+    info(">> Downloading Winget...")
     Invoke-WebRequest -Uri $latest_winget -OutFile winget.appx
 
+    info(">> Installing winget...")
     Add-AppxPackage -Path VCLibs.appx
     Add-AppxPackage -Path Xaml.appx
     Add-AppxPackage -Path winget.appx 
