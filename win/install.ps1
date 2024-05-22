@@ -91,6 +91,12 @@ function deploy_dotfiles() {
 }
 
 
+function farewall_greeting() {
+    info("Deploy complited")
+    info("Please Restart Machine.")
+    info("Thank you use this script.")
+}
+
 greeting
 
 # Winget install
@@ -101,3 +107,6 @@ install_package
 
 # deploy dotfiles
 #deploy_dotfiles
+
+
+farewall_greeting
