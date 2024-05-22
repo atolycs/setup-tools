@@ -4,11 +4,22 @@
 
 * Windows
 ```powershell
+
 $ Set-ExecutionPolicy -Scope Process RemoteSigned
-$ Invoke-Webrequest https://setup.atolycs.dev/?os=windows | 
+
+# github raw link
+$ Invoke-WebRequest https://github.com/atolycs/setup-tools/raw/main/win/install.ps1 | Invoke-Expression
+
+# shorten link on my domain.
+$ Invoke-Webrequest https://setup.atolycs.dev/?os=windows | Invoke-Expression
 ```
 
 * Linux
 ```bash
-$ curl -sLo https://setup.atolycs.dev/?os=linux | bash 
+
+# github raw link
+$ curl -sL https://github.com/atolycs/setup-tools/raw/main/linux/install.sh | bash 
+
+# shorten link on my domain.
+$ curl -sL https://setup.atolycs.dev/?os=linux | bash 
 ```
