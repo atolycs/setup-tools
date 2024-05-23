@@ -99,6 +99,25 @@ function farewall_greeting() {
     info("Thank you use this script.")
 }
 
+function add_known_hosts() {
+    if (-Not (Get-Command ssh-keyscan)) {
+        warn("ssh-keyscan.exe not found")
+    }
+    $add_host_keys = @(
+        @{Name="ssh.github.com"};
+        @{Name="github.com"};
+        @{Name=""}
+    )
+    ForEach ($str_name in $add_host_keys) {
+        if ($str_name.Name -eq "") {
+            info("End of Array")
+            break;
+        }
+
+        info("Adding host key: " + $str_name.Name + " ...")
+    }
+}
+
 greeting
 
 # Winget install
@@ -110,5 +129,7 @@ install_package
 # deploy dotfiles
 #deploy_dotfiles
 
+# ssh known_hosts
+add_known_hosts
 
 farewall_greeting
