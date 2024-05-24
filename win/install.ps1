@@ -86,6 +86,7 @@ function deploy_dotfiles() {
 
     if (-Not (Get-Command git)) {
         warn("Not Found. Downloading git...")
+        warn("Running Command: winget install git.git")
         winget install git.git
     }
 
