@@ -115,6 +115,7 @@ function add_known_hosts() {
         }
 
         info("Adding host key: " + $str_name.Name + " ...")
+        ssh-keyscan  
     }
 }
 
@@ -130,6 +131,6 @@ install_package
 #deploy_dotfiles
 
 # ssh known_hosts
-add_known_hosts
+#add_known_hosts
 
 farewall_greeting
