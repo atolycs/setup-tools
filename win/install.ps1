@@ -93,6 +93,24 @@ function deploy_dotfiles() {
     git clone https://github.com/atolycs/dotfiles -b dev
 }
 
+function uninstall_preinstalled() {
+    info("Removing Preinstalled software...")
+
+    $uninstall_list = @(
+        @{Name=""; msstore_id="";};
+    )
+
+    ForEach ($str_name in $uninstall_list) {
+        if ( $str_name.Name -eq "" ) {
+            info ("End of Array")
+            break
+        }
+
+        info("Uninstalling " + $str_name.Name + " ...")
+        Uninstall-Package($str_name.msstore_id) 
+    }
+}
+
 
 function farewall_greeting() {
     info("Deploy complited")
@@ -116,8 +134,15 @@ function add_known_hosts() {
         }
 
         info("Adding host key: " + $str_name.Name + " ...")
-        ssh-keyscan  
+        ssh-keyscan 
     }
+}
+
+function Uninstall-Package() {
+    Param(
+        $App_id
+    )
+    Get-AppxPackage $App_id | Remove-AppxPackage
 }
 
 greeting
