@@ -112,6 +112,7 @@ function add_gitconfig() {
   try {
       Get-Command git -ErrorAction Stop
       Write-Verbose "git command available."
+      $env:PATH = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
     } catch {
         Write-Host "git command not available"
         exit 3
