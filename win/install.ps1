@@ -63,7 +63,6 @@ function install_package() {
         @{Name="Notepad++"; msstore_id="Notepad++.Notepad++"};
         @{Name="Oh-My-Posh"; msstore_id="JanDeDobbeleer.OhMyPosh"};
         @{Name="Powershell 7"; msstore_id="Microsoft.Powershell"};
-        @{Name=""; msstore_id=""};
     )
 
     info("Updating winget source ...")
@@ -71,11 +70,6 @@ function install_package() {
     winget source update --disable-interactivity
 
     ForEach($str_name in $third_install) {
-        if ($str_name.Name -eq "" -and $str_name.msstore_id -eq "") {
-            info("End Of Array")
-            break;
-        }
-
         info(">> Installing " + $str_name.Name + "...")
         winget install $str_name.msstore_id --source winget
     }
@@ -111,6 +105,21 @@ function uninstall_preinstalled() {
     }
 }
 
+function add_gitconfig() {
+  info("Setting up git configuration...")
+  New-Item -ItemType File -Path "$env:USERPROFILE\.gitconfig" 
+
+  try {
+      Get-Command git -ErrorAction Stop
+      Write-Verbose "git command available."
+    } catch {
+        Write-Host "git command not available"
+        exit 3
+  }
+
+  git config --global http.sslbackend schannel
+
+}
 
 function farewall_greeting() {
     info("Deploy complited")
@@ -125,14 +134,8 @@ function add_known_hosts() {
     $add_host_keys = @(
         @{Name="ssh.github.com"};
         @{Name="github.com"};
-        @{Name=""}
     )
     ForEach ($str_name in $add_host_keys) {
-        if ($str_name.Name -eq "") {
-            info("End of Array")
-            break;
-        }
-
         info("Adding host key: " + $str_name.Name + " ...")
         ssh-keyscan 
     }
@@ -158,5 +161,7 @@ install_package
 
 # ssh known_hosts
 #add_known_hosts
+
+add_gitconfig
 
 farewall_greeting
