@@ -109,17 +109,7 @@ function add_gitconfig() {
   info("Setting up git configuration...")
   New-Item -ItemType File -Path "$env:USERPROFILE\.gitconfig" 
 
-  try {
-      Get-Command git -ErrorAction Stop
-      Write-Verbose "git command available."
-      $env:PATH = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-    } catch {
-        Write-Host "git command not available"
-        exit 3
-  }
-
-  git config --global http.sslbackend schannel
-
+  Start-Process -Wait -Command "powershell git config --global http.sslbackend schannel"
 }
 
 function farewall_greeting() {
