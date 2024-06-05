@@ -10,8 +10,15 @@ $ Set-ExecutionPolicy -Scope Process RemoteSigned
 # github raw link
 $ Invoke-WebRequest https://github.com/atolycs/setup-tools/raw/main/win/install.ps1 | Invoke-Expression
 
+# or
+$ iwr https://github.com/atolycs/setup-tools/raw/main/win/install.ps1 | iex
+
+
 # shorten link on my domain.
-$ Invoke-Webrequest https://setup.atolycs.dev/?os=windows | Invoke-Expression
+$ Invoke-Webrequest https://setup.atolycs.dev/win | Invoke-Expression
+
+# or
+$ iwr https://setup.atolycs.dev/win | iex
 ```
 
 * Linux
