@@ -2,8 +2,6 @@
 
 $script_version = "1.0.0"
 
-
-
 function greeting() {
     Write-Host "+-----------------------------------------+"
     Write-Host "|  Atolycs Windows Setup Tools            |"
@@ -63,6 +61,7 @@ function install_package() {
         @{Name="Notepad++"; msstore_id="Notepad++.Notepad++"};
         @{Name="Oh-My-Posh"; msstore_id="JanDeDobbeleer.OhMyPosh"};
         @{Name="Powershell 7"; msstore_id="Microsoft.Powershell"};
+        @{Name="Zig Compiler"; msstore_id="zig.zig"};
     )
 
     info("Updating winget source ...")
@@ -109,7 +108,7 @@ function add_gitconfig() {
   info("Setting up git configuration...")
   New-Item -ItemType File -Path "$env:USERPROFILE\.gitconfig" 
 
-  Start-Process -Wait -Command "powershell git config --global http.sslbackend schannel"
+  Start-Process -Wait powershell -ArgumentList "-Command git config --global http.sslbackend schannel"
 }
 
 function farewall_greeting() {
@@ -122,13 +121,18 @@ function add_known_hosts() {
     if (-Not (Get-Command ssh-keyscan)) {
         warn("ssh-keyscan.exe not found")
     }
+
+    if (-Not (Test-Path ~/.ssh)) {
+        mkdir ~/.ssh
+    }
+
     $add_host_keys = @(
         @{Name="ssh.github.com"};
         @{Name="github.com"};
     )
     ForEach ($str_name in $add_host_keys) {
         info("Adding host key: " + $str_name.Name + " ...")
-        ssh-keyscan 
+        ssh-keyscan -H -t ed25519 $str_name | Tee-Object -Filepath ~/.ssh/known_hosts
     }
 }
 
@@ -151,7 +155,7 @@ install_package
 #deploy_dotfiles
 
 # ssh known_hosts
-#add_known_hosts
+add_known_hosts
 
 add_gitconfig
 
