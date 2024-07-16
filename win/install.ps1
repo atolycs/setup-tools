@@ -27,6 +27,7 @@ function warn() {
 }
 
 function winget_install() {
+  #ref: https://learn.microsoft.com/en-us/windows/package-manager/winget/
     $latest_winget = "https://aka.ms/getwinget"
     $latest_vclib = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
     $latest_xaml = "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx"
@@ -94,11 +95,6 @@ function uninstall_preinstalled() {
     )
 
     ForEach ($str_name in $uninstall_list) {
-        if ( $str_name.Name -eq "" ) {
-            info ("End of Array")
-            break
-        }
-
         info("Uninstalling " + $str_name.Name + " ...")
         Uninstall-Package($str_name.msstore_id) 
     }
@@ -108,6 +104,7 @@ function add_gitconfig() {
   info("Setting up git configuration...")
   New-Item -ItemType File -Path "$env:USERPROFILE\.gitconfig" 
 
+  $git_path = "C:\Program Files"
   Start-Process -Wait powershell -ArgumentList "-Command git config --global http.sslbackend schannel"
 }
 
