@@ -154,6 +154,6 @@ install_package
 # ssh known_hosts
 add_known_hosts
 
-add_gitconfig
+#add_gitconfig
 
 farewall_greeting
