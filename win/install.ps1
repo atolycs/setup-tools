@@ -68,6 +68,7 @@ function install_package() {
         @{Name="NeoVim"; msstore_id="NeoVim.NeoVim"};
         @{Name="HWMonitor"; msstore_id="CPUID.HWMonitor"};
         @{Name="KeePassXC"; msstore_id="KeePassXCTeam.KeePassXC"};
+        @{Name="Firefox ESR"; msstore_id="Mozilla.Firefox.ESR"};
     )
 
     info("Updating winget source ...")
