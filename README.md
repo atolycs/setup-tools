@@ -5,20 +5,20 @@
 * Windows
 ```powershell
 
-$ Set-ExecutionPolicy -Scope Process RemoteSigned
+PS > Set-ExecutionPolicy -Scope Process RemoteSigned
 
 # github raw link
-$ Invoke-WebRequest https://github.com/atolycs/setup-tools/raw/main/win/install.ps1 | Invoke-Expression
+PS > Invoke-WebRequest https://github.com/atolycs/setup-tools/raw/main/win/install.ps1 | Invoke-Expression
 
 # or
-$ iwr https://github.com/atolycs/setup-tools/raw/main/win/install.ps1 | iex
+PS > iwr https://github.com/atolycs/setup-tools/raw/main/win/install.ps1 | iex
 
 
 # shorten link on my domain.
-$ Invoke-Webrequest https://setup.atolycs.dev/win | Invoke-Expression
+PS > Invoke-Webrequest https://setup.atolycs.dev/win | Invoke-Expression
 
 # or
-$ iwr https://setup.atolycs.dev/win | iex
+PS > iwr https://setup.atolycs.dev/win | iex
 ```
 
 * Linux
@@ -29,4 +29,13 @@ $ curl -sL https://github.com/atolycs/setup-tools/raw/main/linux/install.sh | ba
 
 # shorten link on my domain.
 $ curl -sL https://setup.atolycs.dev/?os=linux | bash 
+```
+
+
+
+# Windows Only git config
+``` powershell
+PS > cd $env:USERPROFILE
+PS > touch .gitconfig
+PS > git config --global http.sslBackend schannel
 ```
