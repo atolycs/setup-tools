@@ -67,8 +67,11 @@ function install_package() {
         @{Name="CPU-Z"; msstore_id="CPUID.CPU-Z"};
         @{Name="NeoVim"; msstore_id="NeoVim.NeoVim"};
         @{Name="HWMonitor"; msstore_id="CPUID.HWMonitor"};
+        @{Name="Core Temp"; msstore_id="ALCPU.CoreTemp"};
+        @{Name="Process Explorer"; msstore_id="Microsoft.Sysinternals.ProcessExplorer"};
         @{Name="KeePassXC"; msstore_id="KeePassXCTeam.KeePassXC"};
         @{Name="Firefox ESR"; msstore_id="Mozilla.Firefox.ESR"};
+        @{Name="Zig"; msstore_id="Zig.Zig"};
     )
 
     info("Updating winget source ...")
