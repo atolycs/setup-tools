@@ -153,7 +153,7 @@ function Uninstall-Package() {
 greeting
 
 # Winget install
-if ( (Get-AppxPackage Microsoft.DesktopAppInstaller).Version == $winget_check_version ) {
+if ( (Get-AppxPackage Microsoft.DesktopAppInstaller).Version -eq $winget_check_version ) {
   info("Winget version already latest. skip")
 } else {
   winget_install
