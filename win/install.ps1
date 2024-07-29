@@ -68,6 +68,7 @@ function install_package() {
         @{Name="HWMonitor"; msstore_id="CPUID.HWMonitor"};
         @{Name="Core Temp"; msstore_id="ALCPU.CoreTemp"};
         @{Name="Process Explorer"; msstore_id="Microsoft.Sysinternals.ProcessExplorer"};
+        @{Name="Microsoft Visual C++ 2015-2022 Redistributable (x64) "; msstore_id="Microsoft.VCRedist.2015+.x64"};
         @{Name="KeePassXC"; msstore_id="KeePassXCTeam.KeePassXC"};
         @{Name="Firefox ESR"; msstore_id="Mozilla.Firefox.ESR"};
         @{Name="Zig"; msstore_id="Zig.Zig"};
