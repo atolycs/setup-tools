@@ -1,6 +1,7 @@
 # Windows setup tools
 
 $script_version = "1.0.0"
+$winget_check_version = "1.23.1911.0"
 
 function greeting() {
     Write-Host "+-----------------------------------------+"
@@ -152,7 +153,11 @@ function Uninstall-Package() {
 greeting
 
 # Winget install
-winget_install
+if ( (Get-AppxPackage Microsoft.DesktopAppInstaller).Version == $winget_check_version ) {
+  info("Winget version already latest. skip")
+} else {
+  winget_install
+}
 
 # Install from winget
 install_package
