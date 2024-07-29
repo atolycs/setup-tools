@@ -62,7 +62,6 @@ function install_package() {
         @{Name="Notepad++"; msstore_id="Notepad++.Notepad++"};
         @{Name="Oh-My-Posh"; msstore_id="JanDeDobbeleer.OhMyPosh"};
         @{Name="Powershell 7"; msstore_id="Microsoft.Powershell"};
-        @{Name="Zig Compiler"; msstore_id="zig.zig"};
         @{Name="Crystal Disk info"; msstore_id="CrystalDewWorld.CrystalDiskInfo"};
         @{Name="CPU-Z"; msstore_id="CPUID.CPU-Z"};
         @{Name="NeoVim"; msstore_id="NeoVim.NeoVim"};
