@@ -55,23 +55,17 @@ function winget_install() {
 function install_package() {
 
     $third_install = @(
-        @{Name="GitHub CLI"; msstore_id="GitHub.cli"};
-        @{Name="Git for Windows"; msstore_id="Git.Git"};
         @{Name="7-Zip"; msstore_id="7zip.7zip"};
         @{Name="Visual Studio Code"; msstore_id="Microsoft.VisualStudioCode"};
         @{Name="Notepad++"; msstore_id="Notepad++.Notepad++"};
         @{Name="Oh-My-Posh"; msstore_id="JanDeDobbeleer.OhMyPosh"};
         @{Name="Powershell 7"; msstore_id="Microsoft.Powershell"};
-        @{Name="Zig Compiler"; msstore_id="zig.zig"};
-        @{Name="Crystal Disk info"; msstore_id="CrystalDewWorld.CrystalDiskInfo"};
+        @{Name="CrystalDiskinfo"; msstore_id="CrystalDewWorld.CrystalDiskInfo"};
         @{Name="CPU-Z"; msstore_id="CPUID.CPU-Z"};
-        @{Name="NeoVim"; msstore_id="NeoVim.NeoVim"};
         @{Name="HWMonitor"; msstore_id="CPUID.HWMonitor"};
         @{Name="Core Temp"; msstore_id="ALCPU.CoreTemp"};
         @{Name="Process Explorer"; msstore_id="Microsoft.Sysinternals.ProcessExplorer"};
-        @{Name="KeePassXC"; msstore_id="KeePassXCTeam.KeePassXC"};
         @{Name="Firefox ESR"; msstore_id="Mozilla.Firefox.ESR"};
-        @{Name="Zig"; msstore_id="Zig.Zig"};
     )
 
     info("Updating winget source ...")
