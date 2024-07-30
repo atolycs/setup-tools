@@ -32,11 +32,9 @@ function install_package() {
     $third_install = @(
         @{Name="GitHub CLI"; msstore_id="GitHub.cli"};
         @{Name="Git for Windows"; msstore_id="Git.Git"};
-        @{Name="Powershell 7"; msstore_id="Microsoft.Powershell"};
         @{Name="Zig Compiler"; msstore_id="zig.zig"};
         @{Name="NeoVim"; msstore_id="NeoVim.NeoVim"};
         @{Name="KeePassXC"; msstore_id="KeePassXCTeam.KeePassXC"};
-        @{Name="Zig"; msstore_id="Zig.Zig"};
     )
 
     info("Updating winget source ...")

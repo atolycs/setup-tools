@@ -1,6 +1,7 @@
 # Windows setup tools
 
 $script_version = "1.0.0"
+$winget_check_version = "1.23.1911.0"
 
 function greeting() {
     Write-Host "+-----------------------------------------+"
@@ -65,6 +66,7 @@ function install_package() {
         @{Name="HWMonitor"; msstore_id="CPUID.HWMonitor"};
         @{Name="Core Temp"; msstore_id="ALCPU.CoreTemp"};
         @{Name="Process Explorer"; msstore_id="Microsoft.Sysinternals.ProcessExplorer"};
+        @{Name="Microsoft Visual C++ 2015-2022 Redistributable (x64) "; msstore_id="Microsoft.VCRedist.2015+.x64"};
         @{Name="Firefox ESR"; msstore_id="Mozilla.Firefox.ESR"};
     )
 
@@ -146,7 +148,11 @@ function Uninstall-Package() {
 greeting
 
 # Winget install
-winget_install
+if ( (Get-AppxPackage Microsoft.DesktopAppInstaller).Version -eq $winget_check_version ) {
+  info("Winget version already latest. skip")
+} else {
+  winget_install
+}
 
 # Install from winget
 install_package
