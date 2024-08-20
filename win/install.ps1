@@ -162,7 +162,7 @@ function registry_set() {
 
     ForEach ($str_key in $set_key) {
       info("Setting Registry Key: " + $str_key.Key + " Value: " + $str_key.Value)
-      Set-ItemProperty -LiteralPath $str_key.Key -Name $str_key.Name -PropertyType $str_key.PropertyType -Value $str_key.Value
+      New-ItemProperty -LiteralPath $str_key.Key -Name $str_key.Name -PropertyType $str_key.PropertyType -Value $str_key.Value
     }
   }
 
