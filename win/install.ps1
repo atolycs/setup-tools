@@ -61,13 +61,13 @@ function install_package() {
         @{Name="Notepad++"; msstore_id="Notepad++.Notepad++"};
         @{Name="Oh-My-Posh"; msstore_id="JanDeDobbeleer.OhMyPosh"};
         @{Name="Powershell 7"; msstore_id="Microsoft.Powershell"};
-        @{Name="CrystalDiskinfo"; msstore_id="CrystalDewWorld.CrystalDiskInfo"};
-        @{Name="CPU-Z"; msstore_id="CPUID.CPU-Z"};
-        @{Name="HWMonitor"; msstore_id="CPUID.HWMonitor"};
-        @{Name="Core Temp"; msstore_id="ALCPU.CoreTemp"};
         @{Name="Process Explorer"; msstore_id="Microsoft.Sysinternals.ProcessExplorer"};
         @{Name="Microsoft Visual C++ 2015-2022 Redistributable (x64) "; msstore_id="Microsoft.VCRedist.2015+.x64"};
         @{Name="Firefox ESR"; msstore_id="Mozilla.Firefox.ESR"};
+        @{Name="GitHub CLI"; msstore_id="GitHub.cli"};
+        @{Name="Git for Windows"; msstore_id="Git.Git"};
+        @{Name="Zig Compiler"; msstore_id="zig.zig"};
+        @{Name="NeoVim"; msstore_id="NeoVim.NeoVim"};
     )
 
     info("Updating winget source ...")

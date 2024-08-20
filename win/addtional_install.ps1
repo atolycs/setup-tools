@@ -30,11 +30,11 @@ function warn() {
 function install_package() {
 
     $third_install = @(
-        @{Name="GitHub CLI"; msstore_id="GitHub.cli"};
-        @{Name="Git for Windows"; msstore_id="Git.Git"};
-        @{Name="Zig Compiler"; msstore_id="zig.zig"};
-        @{Name="NeoVim"; msstore_id="NeoVim.NeoVim"};
         @{Name="KeePassXC"; msstore_id="KeePassXCTeam.KeePassXC"};
+        @{Name="CrystalDiskinfo"; msstore_id="CrystalDewWorld.CrystalDiskInfo"};
+        @{Name="CPU-Z"; msstore_id="CPUID.CPU-Z"};
+        @{Name="HWMonitor"; msstore_id="CPUID.HWMonitor"};
+        @{Name="Core Temp"; msstore_id="ALCPU.CoreTemp"};
     )
 
     info("Updating winget source ...")
