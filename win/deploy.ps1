@@ -159,7 +159,7 @@ function end_message() {
 #}
 function update_winget() {
   
-  $download_tmp = New-TempDirectory()
+  $download_tmp = New-TempDirectory
   $winget_API = "https://api.github.com/repos/microsoft/winget-cli-releases/latest"
   $winget_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith(".msixbundle")}
   $winget_Dependicies_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith("_Dependencies.zip")}
