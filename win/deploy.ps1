@@ -71,10 +71,10 @@ greeting
 
 # ReLaunch Administrator permission
 function ReLaunchAdmin() {
+  $currentProcess = Get-CurrentProcess
   if ($currentProcess.Name -eq "WindowsTerminal") {
 	  Write-Host "Calling $($MyInvocation.MyCommand)"
 	  info "Windows Terminal Killing..."
-	  $currentProcess = Get-CurrentProcess
 	  #$command = "cd '$pwd'; $($MyInvocation.ScriptName)"
 	  $command = "iwr $script_url | iex" 
 
