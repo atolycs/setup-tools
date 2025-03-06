@@ -184,12 +184,15 @@ function update_winget() {
 }
 
 function New-TempDirectory {
-  $parent = [System.IO.Path]::GetTempPath()
-  do {
-    $name = [System.IO.Path]::GetRandomFileName()
-    $item = New-Item -Path $parent -Name $name -ItemType "Directory"
-  } while (-not $item)
-  return $item.FullName
+    $path = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+    #if/while path already exists, generate a new path
+    while(Test-Path $path)) {
+        $path = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+    }
+
+    #create directory with generated path
+    New-Item -ItemType Directory -Path $path
+    return $path
 }
 
 function main() {
