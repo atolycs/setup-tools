@@ -72,6 +72,7 @@ greeting
 # ReLaunch Administrator permission
 function ReLaunchAdmin() {
   $currentProcess = Get-CurrentProcess
+  Write-Host $currentProcess
   if ($currentProcess.Name -eq "WindowsTerminal") {
 	  Write-Host "Calling $($MyInvocation.MyCommand)"
 	  info "Windows Terminal Killing..."
