@@ -72,7 +72,7 @@ greeting
 function ReLaunchAdmin() {
   warn "ReLaunching Admin Rights..."
   if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
-    Start-Process powershell.exe "-NoExit -ExecutionPolicy Bypass -Command $PSCommandPath" -Verb RunAs -Wait
+    Start-Process powershell.exe "-ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs -Wait
     exit
   }
 }
