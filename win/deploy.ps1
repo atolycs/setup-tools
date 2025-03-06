@@ -71,15 +71,17 @@ greeting
 
 # ReLaunch Administrator permission
 function ReLaunchAdmin() {
-  Write-Host "Calling $($MyInvocation.MyCommand)"
-  info "Windows Terminal Killing..."
-  $currentProcess = Get-CurrentProcess
-  #$command = "cd '$pwd'; $($MyInvocation.ScriptName)"
-  $command = "iwr $script_url | iex" 
+  if ($currentProcess.Name -eq "WindowsTerminal") {
+	  Write-Host "Calling $($MyInvocation.MyCommand)"
+	  info "Windows Terminal Killing..."
+	  $currentProcess = Get-CurrentProcess
+	  #$command = "cd '$pwd'; $($MyInvocation.ScriptName)"
+	  $command = "iwr $script_url | iex" 
 
-  Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs 
+	  Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs 
 
-  Stop-Process -id $currentProcess.Id
+	  Stop-Process -id $currentProcess.Id
+  }
   warn "ReLaunching Admin Rights..."
   if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
     Start-Process powershell.exe "-ExecutionPolicy Bypass -Command `"iwr $script_url | iex`"" -Verb RunAs -Wait
