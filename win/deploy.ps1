@@ -141,21 +141,55 @@ function end_message() {
   Restart-Computer
 }
 
+#function update_winget() {
+#  $command = "cd '$pwd'; $($MyInvocation.Line)"
+#  info ">> Updating winget..."
+#  Install-Module -Name Microsoft.Winget.Client -Force -AllowClobber -Repository PSGallery
+#  info ">> Installing winget..."
+#  Repair-WingetPackageManager -AllUsers
+#
+#  info ">> Fixing Winget path..."
+#  $WinGetFolderPath = (Get-ChildItem -Path ([System.IO.Path]::Combine($env:ProgramFiles, 'WindowsApps')) -Filter "Microsoft.DesktopAppInstaller_*_${arch}__8wekyb3d8bbwe" | Sort-Object Name | Select-Object -Last 1).FullName
+#
+#  if ($null -ne $WinGetFolderPath) {
+#    $systemEnvPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Machine)
+#    $systemEnvPath += ";$WinGetFolderPath"
+#    [System.Environment]::SetEnvironmentVariable('PATH', $systemEnvPath, [System.EnvironmentVariableTarget]::Machine)
+#  }
+#}
 function update_winget() {
-  $command = "cd '$pwd'; $($MyInvocation.Line)"
-  info ">> Updating winget..."
-  Install-Module -Name Microsoft.Winget.Client -Force -AllowClobber -Repository PSGallery
-  info ">> Installing winget..."
-  Repair-WingetPackageManager -AllUsers
   
-  info ">> Fixing Winget path..."
-  $WinGetFolderPath = (Get-ChildItem -Path ([System.IO.Path]::Combine($env:ProgramFiles, 'WindowsApps')) -Filter "Microsoft.DesktopAppInstaller_*_${arch}__8wekyb3d8bbwe" | Sort-Object Name | Select-Object -Last 1).FullName
+  $download_tmp = New-TempDirectory()
+  $winget_API = "https://api.github.com/repos/microsoft/winget-cli-releases/latest"
+  $winget_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith(".msixbundle")}
+  $winget_Dependicies_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith("_Dependencies.zip")}
 
-  if ($null -ne $WinGetFolderPath) {
-    $systemEnvPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Machine)
-    $systemEnvPath += ";$WinGetFolderPath"
-    [System.Environment]::SetEnvironmentVariable('PATH', $systemEnvPath, [System.EnvironmentVariableTarget]::Machine)
-  }
+
+  info ">> Downloading Packages..."
+  iwr -Uri $winget_DL -OutFile ${download_tmp}/winget.msixbundle -UseBasicParsing
+  iwr -Uri $winget_Dependicies_DL -OutFile ${download_tmp}/Deps.zip -UseBasicParsing
+
+
+  info ">> Expanding and Installing Winget Dependencies..."
+  New-Item -ItemType "Directory" -Path ${download_tmp}/deps
+  Expand-Archive -Path ${download_tmp}Deps.zip -DestinationPath ${download_tmp}/deps
+  Add-AppxPackage -Path ${download_tmp}/x64/*.appx
+
+  info ">> Installing winget package..."
+  Add-AppxPackage -Path ${download_tmp}/winget.msixbundle
+
+  info ">> Removing tmp folders..."
+  Remove-Item -Recurse ${download_tmp}
+
+}
+
+function New-TempDirectory {
+  $parent = [System.IO.Path]::GetTempPath()
+  do {
+    $name = [System.IO.Path]::GetRandomFileName()
+    $item = New-Item -Path $parent -Name $name -ItemType "Directory" -ErrorAction SilientlyContinue
+  } while (-not $item)
+  return $item.FullName
 }
 
 function main() {
