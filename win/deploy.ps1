@@ -186,7 +186,7 @@ function update_winget() {
 function New-TempDirectory {
     $path = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
     #if/while path already exists, generate a new path
-    while(Test-Path $path)) {
+    while(Test-Path $path) {
         $path = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
     }
 
