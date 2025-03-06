@@ -69,9 +69,46 @@ function warn() {
 greeting
 
 # ReLaunch Administrator permission
+if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
+  Start-Process powershell.exe "-ExecutionPolicy Bypass -Command cd $NOW_DIR; $PSCommandPath" -Verb RunAs -Wait
+  exit
+}
 
 
-info "INFO TEST"
-warn "WARN TEST"
+function winget_install() {
+  info "Installing winget package..."
+  $third_install = @(
+    @{Name="7-Zip"; msstore_id="7zip.7zip"};
+    @{Name="AWS CLI"; msstore_id="Amazon.AWSCLI"};
+    @{Name="Firefox ESR"; msstore_id="Mozilla.Firefox.ESR"};
+    @{Name="Google Chrome"; msstore_id="Google.Chrome.EXE"};
+    @{Name="Zoom"; msstore_id="Zoom.Zoom.EXE"};
+    @{Name="Git for Windows"; msstore_id="Git.Git"};
+    @{Name="Notepad++"; msstore_id="Notepad++.Notepad++"};
+    @{Name="Tera Term 5"; msstore_id="TeraTermProject.teraterm5"};
+    @{Name="Microsoft Visual Studio Code"; msstore_id="Microsoft.VisualStudioCode"};
+  )
+
+  $install_list
+
+  ForEach ($str_name in $third_install) {
+    $install_list += " " + $str_name.msstore_id
+  }
+
+  Write-Host $install_list
+
+  #info ">> Updating Winget source repository..."
+  #winget source update
+
+  #info ">> Installing Packages..."
+  #winget install $install_list --source winget
+
+}
 
 
+function main() {
+  winget_install
+  
+}
+
+main
