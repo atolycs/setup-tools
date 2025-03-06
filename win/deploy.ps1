@@ -159,6 +159,12 @@ function end_message() {
 #}
 function update_winget() {
   
+  $command = "cd '$pwd'; $($MyInvocation.Line)"
+
+  Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
+
+  Stop-Process -id $currentProcess.Id
+
   $download_tmp = New-TempDirectory
 
   Write-Host $download_tmp
