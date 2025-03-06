@@ -104,18 +104,18 @@ function winget_install() {
     @{Name="Tera Term 5"; msstore_id="TeraTermProject.teraterm5"};
     @{Name="Microsoft Visual Studio Code"; msstore_id="Microsoft.VisualStudioCode"};
   )
+  
+  info ">> Updating Winget source repository..."
+  winget source update
 
   $install_list = ""
 
   ForEach ($str_name in $third_install) {
-    $install_list += " " + $str_name.msstore_id
+    info ">> Installing $($str_name.Name) Packages..."
+    winget install $str_name.msstore_id --source winget
   }
 
-  info ">> Updating Winget source repository..."
-  winget source update
 
-  info ">> Installing Packages..."
-  winget install $install_list --source winget
 
 }
 
@@ -150,8 +150,8 @@ function reg_add() {
     )
 
     ForEach ($str_key in $set_key) {
-      info("Setting Registry Key: " + $str_key.Key + "\$Name " + " Value: " + $str_key.Value)
-      New-Item $str_key.Key
+      info("Setting Registry Key: " + $str_key.Key + "\" + $str_key.Name + " " + " Value: " + $str_key.Value)
+      New-Item $str_key.Key -ErrorAction SilentlyContinue
       New-ItemProperty -LiteralPath $str_key.Key -Name $str_key.Name -PropertyType $str_key.PropertyType -Value $str_key.Value -Force 
     }
 }
