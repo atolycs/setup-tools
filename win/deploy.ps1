@@ -146,6 +146,9 @@ function update_winget() {
   Install-Module -Name Microsoft.Winget.Client -Force -AllowClobber -Repository PSGallery
   info ">> Installing winget..."
   Repair-WingetPackageManager -AllUsers
+
+  info "Restarting conhost.exe"
+  Start-Process -Filepath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
 }
 
 function main() {
