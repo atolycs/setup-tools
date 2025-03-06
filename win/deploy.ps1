@@ -69,9 +69,12 @@ function warn() {
 greeting
 
 # ReLaunch Administrator permission
-if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
-  Start-Process powershell.exe "-ExecutionPolicy Bypass -Command cd $NOW_DIR; $PSCommandPath" -Verb RunAs -Wait
-  exit
+function ReLaunchAdmin() {
+  warn "ReLaunching Admin Rights..."
+  if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
+    Start-Process powershell.exe "-NoExit -ExecutionPolicy Bypass -Command $PSCommandPath" -Verb RunAs -Wait
+    exit
+  }
 }
 
 
@@ -89,26 +92,60 @@ function winget_install() {
     @{Name="Microsoft Visual Studio Code"; msstore_id="Microsoft.VisualStudioCode"};
   )
 
-  $install_list
+  $install_list = ""
 
   ForEach ($str_name in $third_install) {
     $install_list += " " + $str_name.msstore_id
   }
 
-  Write-Host $install_list
+  info ">> Updating Winget source repository..."
+  winget source update
 
-  #info ">> Updating Winget source repository..."
-  #winget source update
-
-  #info ">> Installing Packages..."
-  #winget install $install_list --source winget
+  info ">> Installing Packages..."
+  winget install $install_list --source winget
 
 }
 
+function sudo_enabler() {
+  info ">> Enabling sudo for Windows..."
+  sudo config --enable forceNewWindow
+}
+
+function reg_add() {
+  info ">> Adding Registry..."
+      $set_key = @(
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="TaskbarDa"; PropertyType="DWord"; Value="0";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="TaskbarMn"; PropertyType="DWord"; Value="0";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="Hidden"; PropertyType="DWord"; Value="1";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel"; Name="AllItemsIconView"; PropertyType="DWord"; Value="0";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel"; Name="StartupPage"; PropertyType="DWord"; Value="1";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"; Name="{59031a47-3f72-44a7-89c5-5595fe6b30ee}"; PropertyType="DWord"; Value="0";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"; Name="{59031a47-3f72-44a7-89c5-5595fe6b30ee}"; PropertyType="DWord"; Value="0";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"; Name="{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}"; PropertyType="DWord"; Value="0";};
+      @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"; Name="{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}"; PropertyType="DWord"; Value="0";};
+      @{Key="HKCU:Control Panel\Desktop"; Name="PaintDesktopVersion"; PropertyType="DWord"; Value="1";};
+      @{Key="HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\Power"; Name="HiberbootEnabled"; PropertyType="DWord"; Value="0";};
+    )
+
+    ForEach ($str_key in $set_key) {
+      info("Setting Registry Key: " + $str_key.Key + " Value: " + $str_key.Value)
+      New-ItemProperty -LiteralPath $str_key.Key -Name $str_key.Name -PropertyType $str_key.PropertyType -Value $str_key.Value
+    }
+}
+
+function end_message() {
+  info "Setup complited"
+  info "Please Restart Computer"
+  pause
+  Restart-Computer
+}
 
 function main() {
-  winget_install
-  
+  ReLaunchAdmin 
+  sudo_enabler
+  winget_install 
+  reg_add
+  end_message
 }
 
 main
