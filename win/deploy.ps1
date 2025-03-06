@@ -160,28 +160,28 @@ function end_message() {
 function update_winget() {
   
   $download_tmp = New-TempDirectory
+
+  cd $download_tmp
+
   $winget_API = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
   $winget_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith(".msixbundle")}
   $winget_Dependicies_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith("_Dependencies.zip")}
   
-  $winget_package = Join-Path $download_tmp "winget.msixbundle"
-  $deps_archive = Join-Path $download_tmp "Deps.zip"
-  $dest_deps_archive = Join-Path $download_tmp "deps"
-
   info ">> Downloading Packages..."
-  iwr -Uri $winget_DL -OutFile $winget_package -UseBasicParsing
-  iwr -Uri $winget_Dependicies_DL -OutFile $deps_archive -UseBasicParsing
+  iwr -Uri $winget_DL -OutFile "winget.msixbundle" -UseBasicParsing
+  iwr -Uri $winget_Dependicies_DL -OutFile "deps.zip" -UseBasicParsing
 
 
   info ">> Expanding and Installing Winget Dependencies..."
-  New-Item -ItemType "Directory" -Path $dest_deps_archive
-  Expand-Archive -Path $deps_archive -DestinationPath $dest_deps_archive
-  Add-AppxPackage -Path $dest_deps_archive + "x64\*.appx"
+  New-Item -ItemType "Directory" -Path deps
+  Expand-Archive -Path "deps.zip" -DestinationPath .\deps
+  Add-AppxPackage -Path .\deps\x64\*.appx
 
   info ">> Installing winget package..."
-  Add-AppxPackage -Path $winget_package
+  Add-AppxPackage -Path "winget.msixbundle"
 
   info ">> Removing tmp folders..."
+  cd $env:USERPROFILE
   Remove-Item -Recurse $download_tmp
 
 }
