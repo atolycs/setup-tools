@@ -187,7 +187,7 @@ function New-TempDirectory {
   $parent = [System.IO.Path]::GetTempPath()
   do {
     $name = [System.IO.Path]::GetRandomFileName()
-    $item = New-Item -Path $parent -Name $name -ItemType "Directory" -ErrorAction SilientlyContinue
+    $item = New-Item -Path $parent -Name $name -ItemType "Directory"
   } while (-not $item)
   return $item.FullName
 }
