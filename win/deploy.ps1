@@ -161,6 +161,7 @@ function update_winget() {
   
   $download_tmp = New-TempDirectory
 
+  Write-Host $download_tmp
   cd $download_tmp
 
   $winget_API = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
