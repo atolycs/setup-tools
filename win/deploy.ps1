@@ -147,9 +147,15 @@ function update_winget() {
   Install-Module -Name Microsoft.Winget.Client -Force -AllowClobber -Repository PSGallery
   info ">> Installing winget..."
   Repair-WingetPackageManager -AllUsers
+  
+  info ">> Fixing Winget path..."
+  $WinGetFolderPath = (Get-ChildItem -Path ([System.IO.Path]::Combine($env:ProgramFiles, 'WindowsApps')) -Filter "Microsoft.DesktopAppInstaller_*_${arch}__8wekyb3d8bbwe" | Sort-Object Name | Select-Object -Last 1).FullName
 
-  info "Restarting conhost.exe"
-  Start-Process -Filepath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
+  if ($null -ne $WinGetFolderPath) {
+    $systemEnvPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Machine)
+    $systemEnvPath += ";$WinGetFolderPath"
+    [System.Environment]::SetEnvironmentVariable('PATH', $systemEnvPath, [System.EnvironmentVariableTarget]::Machine)
+  }
 }
 
 function main() {
