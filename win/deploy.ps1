@@ -57,14 +57,14 @@ function info() {
   Param(
    [string[]]$message
   )
-  Write-Host "[ INFO ] " + $message
+  Write-Host "[ INFO ] ${message}"
 }
 
 function warn() {
   Param(
    [string[]]$message
   )
-  Write-Host "[ WARN ] " + $message
+  Write-Host "[ WARN ] ${message}"
 }
 
 greeting
@@ -100,10 +100,10 @@ function winget_install() {
   }
 
   info ">> Updating Winget source repository..."
-  winget source update --disable-interactivity
+  winget source update
 
   info ">> Installing Packages..."
-  winget install $install_list --disable-interactivity --source winget
+  winget install $install_list --source winget
 
 }
 
