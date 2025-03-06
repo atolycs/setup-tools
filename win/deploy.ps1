@@ -195,7 +195,7 @@ function New-TempDirectory {
 
     #create directory with generated path
     New-Item -ItemType Directory -Path $path
-    return $path
+    return $path.FullName
 }
 
 function main() {
