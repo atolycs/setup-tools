@@ -1,5 +1,6 @@
 # Script version
 $script_version = "1.0.0"
+$script_url = "https://raw.githubusercontent.com/atolycs/setup-tools/refs/heads/main/win/deploy.ps1"
 
 function CreateBoxText() {
   [CmdletBinding()]
@@ -56,14 +57,14 @@ function info() {
   Param(
    [string[]]$message
   )
-  "[ INFO ] " + $message
+  Write-Host "[ INFO ] " + $message
 }
 
 function warn() {
   Param(
    [string[]]$message
   )
-  "[ WARN ] " + $message
+  Write-Host "[ WARN ] " + $message
 }
 
 greeting
@@ -72,7 +73,7 @@ greeting
 function ReLaunchAdmin() {
   warn "ReLaunching Admin Rights..."
   if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
-    Start-Process powershell.exe "-ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs -Wait
+    Start-Process powershell.exe "-ExecutionPolicy Bypass -Command `"iwr ${script_url} | iex`"" -Verb RunAs -Wait
     exit
   }
 }
@@ -99,10 +100,10 @@ function winget_install() {
   }
 
   info ">> Updating Winget source repository..."
-  winget source update
+  winget source update --disable-interactivity
 
   info ">> Installing Packages..."
-  winget install $install_list --source winget
+  winget install $install_list --disable-interactivity --source winget
 
 }
 
@@ -129,7 +130,7 @@ function reg_add() {
 
     ForEach ($str_key in $set_key) {
       info("Setting Registry Key: " + $str_key.Key + " Value: " + $str_key.Value)
-      New-ItemProperty -LiteralPath $str_key.Key -Name $str_key.Name -PropertyType $str_key.PropertyType -Value $str_key.Value
+      New-ItemProperty -LiteralPath $str_key.Key -Name $str_key.Name -PropertyType $str_key.PropertyType -Value $str_key.Value -Force 
     }
 }
 
