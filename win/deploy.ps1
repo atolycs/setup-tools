@@ -75,7 +75,7 @@ function ReLaunchAdmin() {
   $currentProcess = Get-CurrentProcess
   $command = "cd '$pwd'; $($MyInvocation.Line)"
 
-  Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
+  Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs -Wait
 
   Stop-Process -id $currentProcess.Id
   warn "ReLaunching Admin Rights..."
