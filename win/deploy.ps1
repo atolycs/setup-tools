@@ -57,14 +57,14 @@ function info() {
   Param(
    [string[]]$message
   )
-  Write-Host "[ INFO ] ${message}"
+  Write-Host "[ INFO ] $message"
 }
 
 function warn() {
   Param(
    [string[]]$message
   )
-  Write-Host "[ WARN ] ${message}"
+  Write-Host "[ WARN ] $message"
 }
 
 greeting
@@ -73,7 +73,7 @@ greeting
 function ReLaunchAdmin() {
   warn "ReLaunching Admin Rights..."
   if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
-    Start-Process powershell.exe "-ExecutionPolicy Bypass -Command `"iwr ${script_url} | iex`"" -Verb RunAs -Wait
+    Start-Process powershell.exe "-ExecutionPolicy Bypass -Command `"iwr $script_url | iex`"" -Verb RunAs -Wait
     exit
   }
 }
@@ -164,25 +164,25 @@ function update_winget() {
   $winget_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith(".msixbundle")}
   $winget_Dependicies_DL = $(Invoke-RestMethod $winget_API).assets.browser_download_url | Where-Object {$_.EndsWith("_Dependencies.zip")}
   
-  $winget_package = Join-Path ${download_tmp} "winget.msixbundle"
-  $deps_archive = Join-Path ${download_tmp} "Deps.zip"
-  $dest_deps_archive = Join-Path ${download_tmp} "deps"
+  $winget_package = Join-Path $download_tmp "winget.msixbundle"
+  $deps_archive = Join-Path $download_tmp "Deps.zip"
+  $dest_deps_archive = Join-Path $download_tmp "deps"
 
   info ">> Downloading Packages..."
-  iwr -Uri $winget_DL -OutFile ${winget_package} -UseBasicParsing
-  iwr -Uri $winget_Dependicies_DL -OutFile ${deps_archive} -UseBasicParsing
+  iwr -Uri $winget_DL -OutFile $winget_package -UseBasicParsing
+  iwr -Uri $winget_Dependicies_DL -OutFile $deps_archive -UseBasicParsing
 
 
   info ">> Expanding and Installing Winget Dependencies..."
-  New-Item -ItemType "Directory" -Path ${dest_deps_archive}
-  Expand-Archive -Path ${deps_archive} -DestinationPath ${dest_deps_archive}
-  Add-AppxPackage -Path $(Join-Path ${dest_deps_archive} "x64" "*.appx")
+  New-Item -ItemType "Directory" -Path $dest_deps_archive
+  Expand-Archive -Path $deps_archive -DestinationPath $dest_deps_archive
+  Add-AppxPackage -Path $dest_deps_archive + "x64\*.appx"
 
   info ">> Installing winget package..."
-  Add-AppxPackage -Path ${winget_package}
+  Add-AppxPackage -Path $winget_package
 
   info ">> Removing tmp folders..."
-  Remove-Item -Recurse ${download_tmp}
+  Remove-Item -Recurse $download_tmp
 
 }
 
