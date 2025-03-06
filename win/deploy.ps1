@@ -157,8 +157,24 @@ function end_message() {
 #    [System.Environment]::SetEnvironmentVariable('PATH', $systemEnvPath, [System.EnvironmentVariableTarget]::Machine)
 #  }
 #}
+
+function Get-CurrentProcess {
+
+    $oldTitle = $host.ui.RawUI.WindowTitle
+    $tempTitle = ([Guid]::NewGuid())
+    $host.ui.RawUI.WindowTitle = $tempTitle
+    Start-Sleep 1
+    $currentProcess = Get-Process | Where-Object { $_.MainWindowTitle -eq $tempTitle }
+    $currentProcess = [PSCustomObject]@{
+        Name = $currentProcess.Name
+        Id   = $currentProcess.Id
+    }
+    $host.ui.RawUI.WindowTitle = $oldTitle
+    return $currentProcess
+}
+
 function update_winget() {
-  
+  $currentProcess = Get-CurrentProcess
   $command = "cd '$pwd'; $($MyInvocation.Line)"
 
   Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
