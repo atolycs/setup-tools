@@ -195,6 +195,7 @@ function New-TempDirectory {
 
     #create directory with generated path
     New-Item -ItemType Directory -Path $path
+    Write-Host $path
     return $path
 }
 
