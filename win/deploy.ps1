@@ -71,6 +71,13 @@ greeting
 
 # ReLaunch Administrator permission
 function ReLaunchAdmin() {
+  info "Windows Terminal Killing..."
+  $currentProcess = Get-CurrentProcess
+  $command = "cd '$pwd'; $($MyInvocation.Line)"
+
+  Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
+
+  Stop-Process -id $currentProcess.Id
   warn "ReLaunching Admin Rights..."
   if ( !([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("Administrators") ) {
     Start-Process powershell.exe "-ExecutionPolicy Bypass -Command `"iwr $script_url | iex`"" -Verb RunAs -Wait
@@ -174,12 +181,6 @@ function Get-CurrentProcess {
 }
 
 function update_winget() {
-  $currentProcess = Get-CurrentProcess
-  $command = "cd '$pwd'; $($MyInvocation.Line)"
-
-  Start-Process -FilePath "conhost.exe" -ArgumentList "powershell -ExecutionPolicy Bypass -Command &{$command}" -Verb RunAs
-
-  Stop-Process -id $currentProcess.Id
 
   $download_tmp = New-TempDirectory
 
