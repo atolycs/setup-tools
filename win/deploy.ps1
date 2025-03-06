@@ -142,6 +142,7 @@ function end_message() {
 }
 
 function update_winget() {
+  $command = "cd '$pwd'; $(MyInvocation.Line)"
   info ">> Updating winget..."
   Install-Module -Name Microsoft.Winget.Client -Force -AllowClobber -Repository PSGallery
   info ">> Installing winget..."
