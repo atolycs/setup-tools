@@ -141,9 +141,17 @@ function end_message() {
   Restart-Computer
 }
 
+function update_winget() {
+  info ">> Updating winget..."
+  Install-Module -Name Microsoft.Winget.Client -Force -AllowClobber -Repository PSGallery
+  info ">> Installing winget..."
+  Repair-WingetPackageManager -AllUsers
+}
+
 function main() {
   ReLaunchAdmin 
   sudo_enabler
+  update_winget
   winget_install 
   reg_add
   end_message
