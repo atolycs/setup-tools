@@ -49,24 +49,21 @@ function CreateBoxText() {
 }
 
 function greeting() {
-  "Atolycs Windows Setup Tools`r`nver: ${script_version}`r`nhttps://github.com/atolycs/setup-tools" | CreateBoxText
-  CreateBoxText "Atolycs Windows Setup Tools`r`nver: ${script_version}`r`nhttps://github.com/atolycs/setup-tools"
-
   CreateBoxText -Title "Atolycs Windows Setup Tools" -Ver "ver: ${script_version}" -Url "https://github.com/atolycs/setup-tools"
 }
 
-info() {
+function info() {
   Param(
    [string[]]$message
   )
-  "[ INFO ]" + $message
+  "[ INFO ] " + $message
 }
 
-warn() {
+function warn() {
   Param(
    [string[]]$message
   )
-  "[ WARN ]" + $message
+  "[ WARN ] " + $message
 }
 
 greeting
