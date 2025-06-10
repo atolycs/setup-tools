@@ -1,6 +1,6 @@
 # Script version
 $script_version = "1.0.0"
-$script_url = "https://raw.githubusercontent.com/atolycs/setup-tools/refs/heads/main/win/deploy.ps1"
+$script_url = "https://raw.githubusercontent.com/atolycs/setup-tools/refs/heads/main/win/winget_update.ps1"
 
 function CreateBoxText() {
   [CmdletBinding()]
