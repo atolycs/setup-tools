@@ -1,6 +1,6 @@
 # Atolycs machine setup script
 
-!> [!WARNING]
+> [!WARNING]
 > This script is my personal setup.
 > Don't blindly use my settings unless you know what that entails.
 > Use at your own risk
