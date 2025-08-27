@@ -17,7 +17,7 @@ tty_bold="$(tty_mkbold 39)"
 tty_reset="$(tty_escape 0)"
 
 say() {
-  printf "==> %s" "$@"
+  printf "${tty_blue}==>${tty_bold} %s${tty_reset}\n" "$@"
 }
 
 warn() {
