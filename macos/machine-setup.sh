@@ -55,8 +55,8 @@ if [[ "${OS}" != "Darwin" ]]; then
 fi
 
 say "Setup Show extension"
-
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write com.apple.finder AppleShowAllFiles TRUE
 
 say "Setup show path and status bar"
 defaults write com.apple.finder ShowPathbar -bool true
