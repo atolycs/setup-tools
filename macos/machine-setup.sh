@@ -66,3 +66,6 @@ say "Setup Don't Create .DS_Store file on Network folder"
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 
 say "Completed"
+
+say "Please restart OS or Finder Process"
+say "Cmdline: killall Finder"
