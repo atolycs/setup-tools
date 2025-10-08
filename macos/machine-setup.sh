@@ -61,6 +61,7 @@ defaults write com.apple.finder AppleShowAllFiles true
 say "Setup show path and status bar"
 defaults write com.apple.finder ShowPathbar true
 defaults write com.apple.finder ShowStatusBar true
+defaults write com.apple.finder ShowSideBar 1
 
 say "Setup Finder configuration"
 defaults write com.apple.finder ShowHardDrivesOnDesktop 1
@@ -83,4 +84,4 @@ defaults write "com.apple.WindowManager" EnableStandardClickToShowDesktop -bool 
 say "Completed"
 
 say "Please restart OS or Finder Process"
-say "Cmdline: killall Finder"
+say "Cmdline: killall Finder && killall SystemUIServer && killall Dock"
