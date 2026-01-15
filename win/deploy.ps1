@@ -125,8 +125,9 @@ function sudo_enabler() {
 }
 
 function reg_add() {
-  info ">> Adding Registry..."
-      $set_key = @(
+    info ">> Adding Registry using .NET API..."
+
+    $set_key = @(
       @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="TaskbarDa"; PropertyType="DWord"; Value="0";};
       @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="TaskbarMn"; PropertyType="DWord"; Value="0";};
       @{Key="HKCU:Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="Hidden"; PropertyType="DWord"; Value="1";};
@@ -149,11 +150,67 @@ function reg_add() {
       @{Key="HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\Power"; Name="HiberbootEnabled"; PropertyType="DWord"; Value="0";};
     )
 
-    ForEach ($str_key in $set_key) {
-      info("Setting Registry Key: " + $str_key.Key + "\" + $str_key.Name + " " + " Value: " + $str_key.Value)
-      New-Item $str_key.Key -ErrorAction SilentlyContinue
-      New-ItemProperty -LiteralPath $str_key.Key -Name $str_key.Name -PropertyType $str_key.PropertyType -Value $str_key.Value -Force 
+    function Resolve-Hive {
+        param([string]$hiveToken)
+
+        switch ($hiveToken.ToUpper()) {
+            'HKCU' {'CurrentUser'}
+            'HKEY_CURRENT_USER' {'CurrentUser'}
+            'HKLM' {'LocalMachine'}
+            'HKEY_LOCAL_MACHINE' {'LocalMachine'}
+            'HKCR' {'ClassesRoot'}
+            'HKEY_CLASSES_ROOT' {'ClassesRoot'}
+            'HKU' {'Users'}
+            'HKEY_USERS' {'Users'}
+            'HKCC' {'CurrentConfig'}
+            'HKEY_CURRENT_CONFIG' {'CurrentConfig'}
+            default { throw "Unknown hive token: $hiveToken" }
+        }
     }
+
+    foreach ($entry in $set_key) {
+        try {
+            if ($entry.Key -notmatch '^([^:]+):\\?(.*)$') {
+                Write-Warning "Invalid key format: $($entry.Key)"
+                continue
+            }
+            $hiveToken = $matches[1]
+            $subPath = $matches[2]
+
+            $hiveName = Resolve-Hive -hiveToken $hiveToken
+            $root = [Microsoft.Win32.Registry]::$hiveName
+
+            if ([string]::IsNullOrEmpty($subPath)) {
+                $targetKey = $root
+            } else {
+                $targetKey = $root.CreateSubKey($subPath)
+            }
+
+            if (-not $targetKey) {
+                Write-Warning "Failed to open/create key: $($entry.Key)"
+                continue
+            }
+
+            switch ($entry.PropertyType.ToString().ToLower()) {
+                'dword' { $kind = [Microsoft.Win32.RegistryValueKind]::DWord; $val = [int]$entry.Value }
+                'qword' { $kind = [Microsoft.Win32.RegistryValueKind]::QWord; $val = [long]$entry.Value }
+                'string' { $kind = [Microsoft.Win32.RegistryValueKind]::String; $val = [string]$entry.Value }
+                'expandstring' { $kind = [Microsoft.Win32.RegistryValueKind]::ExpandString; $val = [string]$entry.Value }
+                'multistring' { $kind = [Microsoft.Win32.RegistryValueKind]::MultiString; 
+                                if ($entry.Value -is [array]) { $val = $entry.Value } else { $val = @([string]$entry.Value) } }
+                default { $kind = [Microsoft.Win32.RegistryValueKind]::String; $val = [string]$entry.Value }
+            }
+
+            $targetKey.SetValue($entry.Name, $val, $kind)
+            $targetKey.Close()
+
+            Write-Host "Set: $($entry.Key)\$($entry.Name) = $val ($kind)"
+        } catch {
+            Write-Warning "Failed to set $($entry.Key)\$($entry.Name): $($_.Exception.Message)"
+        }
+    }
+
+    info ">> Registry updates finished."
 }
 
 function end_message() {
