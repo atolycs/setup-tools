@@ -54,6 +54,9 @@ if [[ "${OS}" != "Darwin" ]]; then
   abort "This script is only supported on macOS"
 fi
 
+say "Setup timezone to Asia/Tokyo"
+sudo systemsetup -settimezone Asia/Tokyo
+
 say "Setup Show extension"
 defaults write NSGlobalDomain AppleShowAllExtensions true
 defaults write com.apple.finder AppleShowAllFiles true
