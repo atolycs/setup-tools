@@ -142,8 +142,7 @@ defaults write "com.apple.WindowManager" EnableStandardClickToShowDesktop -bool 
 
 ohai "Installing MacPorts..."
 say "Getting OS Codename..."
-OS_CODENAME=$(${AWK} '/SOFTWARE LICENSE AGREEMENT FOR /{gsub(/\\/,"");print$(NF-1)" "$NF}' ${EULAFILE})
-MACPORTS_URL=$(curl)
+OS_CODENAME=$(${AWK} '/SOFTWARE LICENSE AGREEMENT FOR /{gsub(/\\/,"");print$(NF-1)" "$NF}' ${EULAFILE} | cut -d " " -f 2)
 say "${OS_CODENAME}"
 
 say "Getting MacPorts Installer..."
