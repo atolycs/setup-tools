@@ -68,7 +68,7 @@ major_minor() {
 }
 
 macos_version="$(major_minor "$(/usr/bin/sw_vers -productVersion)")"
-EULAFILE="/System/Library/CoreServices/Setup Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf"
+EULAFILE='/System/Library/CoreServices/Setup Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf'
 
 should_install_command_line_tools() {
   if version_gt "${macos_version}" "10.13"; then
