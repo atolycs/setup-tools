@@ -45,6 +45,36 @@ shell_join() {
   done
 }
 
+chomp() {
+  printf "%s" "${1/"$'\n'"/}"
+}
+
+version_gt() {
+  [[ "${1%.*}" -gt "${2%.*}" ]] || [[ "${1%.*}" -eq "${2%.*}" && "${1#*.}" -gt "${2#*.}" ]]
+}
+
+version_ge() {
+  [[ "${1%.*}" -gt "${2%.*}" ]] || [[ "${1%.*}" -eq "${2%.*}" && "${1#*.}" -ge "${2#*.}" ]]
+}
+
+major_minor() {
+  echo "${1%%.*}.$(
+    x="${1#*.}"
+    echo "${x%%.*}"
+  )"
+}
+
+macos_version="$(major_minor "$(/usr/bin/sw_vers -productVersion)")"
+
+should_install_command_line_tools() {
+  if version_gt "${macos_version}" "10.13"; then
+    ! [[ -e "/Library/Developer/CommandLineTools/usr/bin/git" ]]
+  else
+    ! [[ -e "/Library/Developer/CommandLineTools/usr/bin/git" ]] ||
+      ! [[ -e "/usr/include/iconv.h" ]]
+  fi
+}
+
 echo "Welcome macOS Setup tools"
 echo "   create by Atolycs 2025"
 
@@ -56,6 +86,28 @@ fi
 
 say "Setup timezone to Asia/Tokyo"
 sudo systemsetup -settimezone Asia/Tokyo
+
+if should_install_command_line_tools && verison_ge "${macos_version}" "10.13"; then
+  ohai "Searching online for the Command Line Tools"
+  clt_placeholder="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
+  sudo touch "${clt_placeholder}"
+
+  clt_label_command="/usr/sbin/softwareupdate -l |
+                      grep -B 1 -E 'Command Line Tools' |
+                      awk -F'*' '/^ *\\*/ {print \$2}' |
+                      sed -e 's/^ *Label: //' -e 's/^ *//' |
+                      sort -V |
+                      tail -n1"
+
+  clt_label="$(chomp "$(/bin/bash -c "${clt_label_command}")")"
+
+  if [[ -n "${clt_label}"]];then
+    ohai "Installing ${clt_label}"
+    sudo /usr/sbin/softwareupdate -i "${clt_label}"
+    sudo /usr/bin/xcode-select --switch "/Library/Developer/CommandLineTools"
+  fi
+  sudo rm -f "${clt_placeholder}"
+fi
 
 say "Setup Show extension"
 defaults write NSGlobalDomain AppleShowAllExtensions true
