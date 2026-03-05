@@ -10,6 +10,9 @@ tty_mkbold() {
   tty_escape "1;$1"
 }
 
+AWK="/usr/bin/awk"
+MACPORTS_RELEASE_API="https://api.github.com/repos/macports/macports-base/releases/latest"
+
 tty_underline="$(tty_escape "4;39")"
 tty_blue="$(tty_mkbold 34)"
 tty_red="$(tty_mkbold 31)"
@@ -65,6 +68,7 @@ major_minor() {
 }
 
 macos_version="$(major_minor "$(/usr/bin/sw_vers -productVersion)")"
+EULAFILE="/System/Library/CoreServices/Setup Assistant.app/Contents/Resources/en.lproj/OSXSoftwareLicense.rtf"
 
 should_install_command_line_tools() {
   if version_gt "${macos_version}" "10.13"; then
@@ -85,7 +89,7 @@ if [[ "${OS}" != "Darwin" ]]; then
 fi
 
 say "Setup timezone to Asia/Tokyo"
-sudo systemsetup -settimezone Asia/Tokyo
+sudo /usr/sbin/systemsetup -settimezone "Asia/Tokyo"
 
 if should_install_command_line_tools && version_ge "${macos_version}" "10.13"; then
   ohai "Searching online for the Command Line Tools"
@@ -135,6 +139,29 @@ defaults write com.apple.menuextra.clock ShowSeconds 1
 
 say "Setup Click wallpaper to revelal desktop disable"
 defaults write "com.apple.WindowManager" EnableStandardClickToShowDesktop -bool false
+
+ohai "Installing MacPorts..."
+say "Getting OS Codename..."
+OS_CODENAME=$(${AWK} '/SOFTWARE LICENSE AGREEMENT FOR /{gsub(/\\/,"");print$(NF-1)" "$NF}' ${EULAFILE})
+MACPORTS_URL=$(curl)
+say "${OS_CODENAME}"
+
+say "Getting MacPorts Installer..."
+(
+  cd /tmp
+  MACPORTS_DOWNLOAD_URL=$(curl -L ${MACPORTS_RELEASE_API} |
+    jq -r --arg OSCODENAME $OS_CODENAME '.assets[] | select(.name | contains($OSCODENAME)) | select(.name | endswith(".pkg")) | .browser_download_url')
+  curl -Lo MacPorts.pkg $MACPORTS_DOWNLOAD_URL
+)
+
+say "Installing MacPorts..."
+(
+  cd /tmp
+  sudo /usr/sbin/installer -pkg ./MacPorts.pkg -target /
+)
+
+say "Setting MacPorts PATH to set PATH Envrionment"
+echo "/opt/local/bin" | sudo tee -a /etc/paths.d/20-macports
 
 say "Completed"
 
