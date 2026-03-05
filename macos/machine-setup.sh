@@ -101,7 +101,7 @@ if should_install_command_line_tools && verison_ge "${macos_version}" "10.13"; t
 
   clt_label="$(chomp "$(/bin/bash -c "${clt_label_command}")")"
 
-  if [[ -n "${clt_label}"]];then
+  if [[ -n "${clt_label}" ]]; then
     ohai "Installing ${clt_label}"
     sudo /usr/sbin/softwareupdate -i "${clt_label}"
     sudo /usr/bin/xcode-select --switch "/Library/Developer/CommandLineTools"
