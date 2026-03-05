@@ -87,7 +87,7 @@ fi
 say "Setup timezone to Asia/Tokyo"
 sudo systemsetup -settimezone Asia/Tokyo
 
-if should_install_command_line_tools && verison_ge "${macos_version}" "10.13"; then
+if should_install_command_line_tools && version_ge "${macos_version}" "10.13"; then
   ohai "Searching online for the Command Line Tools"
   clt_placeholder="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
   sudo touch "${clt_placeholder}"
