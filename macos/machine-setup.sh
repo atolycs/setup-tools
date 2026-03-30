@@ -10,6 +10,8 @@ tty_mkbold() {
   tty_escape "1;$1"
 }
 
+scr_location="${HOME}/Pictures/Screenshots"
+
 AWK="/usr/bin/awk"
 MACPORTS_RELEASE_API="https://api.github.com/repos/macports/macports-base/releases/latest"
 
@@ -161,6 +163,16 @@ say "Installing MacPorts..."
 
 say "Setting MacPorts PATH to set PATH Envrionment"
 echo "/opt/local/bin" | sudo tee -a /etc/paths.d/20-macports
+
+say "Screenshot location setup"
+say "setup to ${scr_location}"
+
+if [ ! -d ${scr_location} ]; then
+  mkdir -p ${scr_location}
+  defaults write com.apple.screencapture location ${scr_location}
+else
+  :
+fi
 
 say "Completed"
 
