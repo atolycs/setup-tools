@@ -142,27 +142,52 @@ defaults write com.apple.menuextra.clock ShowSeconds 1
 say "Setup Click wallpaper to revelal desktop disable"
 defaults write "com.apple.WindowManager" EnableStandardClickToShowDesktop -bool false
 
+say "setup Dock size"
+defaults write "com.apple.Dock" tilesize -int 30
+defaults write "com.apple.Dock" largesize -int 60
+
+say "Setup Dock icons"
+defaults delete com.apple.Dock persistent-apps
+defaults delete com.apple.Dock recent-apps
+
+dock_item() {
+  printf '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>', "$1"
+}
+
+defaults write com.apple.Dock persistent-apps -array \
+  "$(dock_item /System/Cryptexes/App/System/Applications/Safari.app)" \
+  "$(dock_item /System/Applications/Apps.app)" \
+  "$(dock_item /System/Applications/Utilities/Screenshot.app)" \
+  "$(dock_item /System/Applications/Calendar.app)" \
+  "$(dock_item /System/Applications/Clock.app)" \
+  "$(dock_item '/System/Applications/App Store.app')" \
+  "$(dock_item '/System/Applications/System Settings.app')" \
+  "$(dock_item /System/Applications/Utilities/Terminal.app)"
+
 ohai "Installing MacPorts..."
 say "Getting OS Codename..."
 OS_CODENAME=$(${AWK} '/SOFTWARE LICENSE AGREEMENT FOR /{gsub(/\\/,"");print$(NF-1)" "$NF}' "${EULAFILE}" | cut -d " " -f 2)
 say "${OS_CODENAME}"
 
-say "Getting MacPorts Installer..."
-(
-  cd /tmp
-  MACPORTS_DOWNLOAD_URL=$(curl -L ${MACPORTS_RELEASE_API} |
-    jq -r --arg OSCODENAME $OS_CODENAME '.assets[] | select(.name | contains($OSCODENAME)) | select(.name | endswith(".pkg")) | .browser_download_url')
-  curl -Lo MacPorts.pkg $MACPORTS_DOWNLOAD_URL
-)
+if [[ ! -d "/opt/local" ]]; then
+  say "Getting MacPorts Installer..."
+  (
+    cd /tmp
+    MACPORTS_DOWNLOAD_URL=$(curl -L ${MACPORTS_RELEASE_API} |
+      jq -r --arg OSCODENAME $OS_CODENAME '.assets[] | select(.name | contains($OSCODENAME)) | select(.name | endswith(".pkg")) | .browser_download_url')
+    curl -Lo MacPorts.pkg $MACPORTS_DOWNLOAD_URL
+  )
 
-say "Installing MacPorts..."
-(
-  cd /tmp
-  sudo /usr/sbin/installer -pkg ./MacPorts.pkg -target /
-)
+  say "Installing MacPorts..."
+  (
+    cd /tmp
+    sudo /usr/sbin/installer -pkg ./MacPorts.pkg -target /
+  )
 
-say "Setting MacPorts PATH to set PATH Envrionment"
-echo "/opt/local/bin" | sudo tee -a /etc/paths.d/20-macports
+  say "Setting MacPorts PATH to set PATH Envrionment"
+  echo "/opt/local/bin" | sudo tee -a /etc/paths.d/20-macports
+
+fi
 
 say "Screenshot location setup"
 say "setup to ${scr_location}"
