@@ -144,7 +144,7 @@ defaults write "com.apple.WindowManager" EnableStandardClickToShowDesktop -bool 
 
 say "setup Dock size"
 defaults write "com.apple.Dock" tilesize -int 30
-defaults write "com.apple.Dock" largesize -int 60
+defaults write "com.apple.Dock" largesize -float 55
 
 say "Setup Dock icons"
 defaults delete com.apple.Dock persistent-apps
