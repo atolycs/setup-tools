@@ -148,6 +148,7 @@ defaults write "com.apple.Dock" tilesize -int 30
 defaults write "com.apple.Dock" largesize -float 55
 
 say "Setup Menu bar icons"
+defaults delete "com.apple.spotlight" "NSStatusItem Visible Item-0"
 defaults write "com.apple.weather.menu" "NSStatusItem Visible Item-0" -int 1
 defaults write "com.apple.controlcenter" "NSStatusItem Visible Item-0" -int 1
 defaults write "com.apple.controlcenter" "NSStatusItem Visible WiFi" -int 1
