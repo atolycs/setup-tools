@@ -143,6 +143,7 @@ say "Setup Click wallpaper to revelal desktop disable"
 defaults write "com.apple.WindowManager" EnableStandardClickToShowDesktop -bool false
 
 say "setup Dock size"
+defaults write "com.apple.Dock" magnification -bool yes
 defaults write "com.apple.Dock" tilesize -int 30
 defaults write "com.apple.Dock" largesize -float 55
 
