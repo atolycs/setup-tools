@@ -186,7 +186,7 @@ if [[ ! -d "/opt/local" ]]; then
 
   say "Setting MacPorts PATH to set PATH Envrionment"
   echo "/opt/local/bin" | sudo tee -a /etc/paths.d/20-macports
-
+  echo "/opt/local/sbin" | sudo tee -a /etc/paths.d/20-macports
 fi
 
 say "Screenshot location setup"
@@ -198,6 +198,12 @@ if [ ! -d ${scr_location} ]; then
 else
   :
 fi
+
+say "Disable Text edit RichText mode"
+defaults write com.apple.TextEdit -int 0
+
+say "Replace Standard Function Keys"
+defaults write -g com.apple.keyboard.fnState 1
 
 say "Completed"
 
