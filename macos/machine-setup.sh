@@ -149,10 +149,10 @@ defaults write "com.apple.Dock" largesize -float 55
 
 say "Setup Menu bar icons"
 defaults delete "com.apple.spotlight" "NSStatusItem Visible Item-0"
-defaults write "com.apple.weather.menu" "NSStatusItem Visible Item-0" -int 1
-defaults write "com.apple.controlcenter" "NSStatusItem Visible Item-0" -int 1
-defaults write "com.apple.controlcenter" "NSStatusItem Visible WiFi" -int 1
-defaults write "com.apple.controlcenter" "NSStatusItem Visible Bluetooth" -int 1
+defaults write "com.apple.weather.menu" "NSStatusItem Visible Item-0" -bool true
+defaults write "com.apple.controlcenter" "NSStatusItem Visible Item-0" -bool true
+defaults write "com.apple.controlcenter" "NSStatusItem Visible WiFi" -bool true
+defaults write "com.apple.controlcenter" "NSStatusItem Visible Bluetooth" -bool true
 
 say "Setup Dock icons"
 defaults delete com.apple.Dock persistent-apps
