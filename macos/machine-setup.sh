@@ -213,6 +213,9 @@ defaults write com.apple.TextEdit RichText -int 0
 say "Replace Standard Function Keys"
 defaults write -g com.apple.keyboard.fnState 1
 
+say "Disable Force Supressed"
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool false
+
 say "Completed"
 
 say "Please restart OS or Finder Process"
