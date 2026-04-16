@@ -211,7 +211,7 @@ say "Disable Text edit RichText mode"
 defaults write com.apple.TextEdit RichText -bool false
 
 say "Replace Standard Function Keys"
-defaults write -g com.apple.keyboard.fnState 1
+defaults write -g com.apple.keyboard.fnState -bool true
 
 say "Disable Force Supressed"
 defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool false
