@@ -23,7 +23,7 @@ PubkeyAuthentication yes
 EOF
 
 echo "Step3: Downloading SSH Public key from GitHub..."
-curl -fsSL https://api.github.com/uesrs/atolycs/keys | jq -r '.[].key' | tee -a ${HOME}/.ssh/authorized_keys
+curl -fsSL https://api.github.com/users/atolycs/keys | jq -r '.[].key' | tee -a ${HOME}/.ssh/authorized_keys
 
 echo "Setup complited."
 echo "IPv4 Address: $(ip route get 1.1.1.1 | awk '{print $7; exit'})"
