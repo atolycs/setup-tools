@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+timedatectl set-timezone "Asia/Tokyo"
+
 source <(curl -fsSL https://raw.githubusercontent.com/atolycs/bash-util-closet/main/logs.func)
 
 msg_info "ArchLinux Live Session SSH setup..."
