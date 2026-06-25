@@ -8,7 +8,7 @@ msg_info "ArchLinux Live Session SSH setup..."
 msg_info "Step1: Checking commands..."
 
 missing=0
-for cmd in curl jq; do
+for cmd in curl; do
   if ! hash "$cmd" 2>/dev/null; then
     echo "Required: $cmd"
     missing=1
@@ -34,7 +34,6 @@ touch "${HOME}/.ssh/authorized_keys"
 chmod 600 "${HOME}/.ssh/authorized_keys"
 
 msg_info "Step4: Downloading SSH Public key from GitHub..."
-# curl -fsSL https://api.github.com/users/atolycs/keys | jq -r '.[].key' | tee -a ${HOME}/.ssh/authorized_keys
 curl -fsSL https://github.com/atolycs.keys | tee -a "${HOME}/.ssh/authorized_keys"
 
 msg_info "Step5: Ensuring sshd is running..."
